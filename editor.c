@@ -83,11 +83,13 @@ void editorLoop(TedState* tState)
 void setCursorPosition(TedSession* tedSession, Coordinate newPos)
 {
     /* Only set the cursor's position if it is still within range */
-    if(
+    if
+    (
         tedSession->screen->min.x <= newPos.x &&
         tedSession->screen->min.y <= newPos.y &&
         tedSession->screen->max.x >= newPos.x &&
-        tedSession->screen->max.y >= newPos.y)
+        tedSession->screen->max.y >= newPos.y
+    )
     {
         /* Set the new position */
         tedSession->screen->cursor = newPos;
