@@ -29,13 +29,48 @@ void editorLoop(TedState* tState)
          */
         if(count > 0)
         {
-            write(tState->ttyFD, &currentChar, 1);
-            // printf("%d\n", currentChar);
+            
+            charInterp:
+
+            printf("bruh: %d\n", currentChar);
 
             /* If Ctrl+X (24) */
             if(currentChar == 24)
             {
                 break;
+            }
+            /* Backspace */
+            else if(currentChar == 127)
+            {
+
+            }
+            /* Control section */
+            else if(currentChar == 27)
+            {
+                
+                count = read(tState->ttyFD, &currentChar, 1);
+
+                /* If it takes time for the sequence to come in */
+                while(count < 0)
+                {
+                    /* TODO: Idk we might need to time it, what if */
+                }
+
+                
+                /* TODO: We need to seek back if not recognizable */
+                if(currentChar == 91)
+                {
+
+                }
+                /* Push it back, not control sequence */
+                else
+                {
+                    goto charInterp;
+                }
+            }
+            else
+            {
+                write(tState->ttyFD, &currentChar, 1);
             }
         }
 
@@ -43,4 +78,18 @@ void editorLoop(TedState* tState)
         
     }
     
+}
+
+void setCursorPosition(TedSession* tedSession, Coordinate newPos)
+{
+    /* Only set the cursor's position if it is still within range */
+    if(
+        tedSession->screen->min.x <= newPos.x &&
+        tedSession->screen->min.y <= newPos.y &&
+        tedSession->screen->max.x >= newPos.x &&
+        tedSession->screen->max.y >= newPos.y)
+    {
+        /* Set the new position */
+        tedSession->screen->cursor = newPos;
+    }
 }
