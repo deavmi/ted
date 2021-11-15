@@ -27,7 +27,8 @@ void setTerm(struct TedState* tState)
     ttySettings.c_lflag = 0;
     // ttySettings.c_lflag = ECHO;
 
-    // ttySettings.
+    ttySettings.c_cc[VMIN] = 1;  // read one byte at a time
+    ttySettings.c_cc[VTIME] = 0; // no time limit for read
 
     int32_t status = tcsetattr(tState->ttyFD, 0, &ttySettings);
 }
